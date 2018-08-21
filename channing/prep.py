@@ -110,5 +110,5 @@ def w2v_dict_to_torch_emb(w2v_dict):
     return embs, w2x
 
 
-embs, w2x = w2v_dict_to_torch_emb(w2v)
+# embs, w2x = w2v_dict_to_torch_emb(w2v)
 # embs(torch.LongTensor([w2x['hillary']]))

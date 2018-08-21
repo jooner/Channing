@@ -2,6 +2,8 @@ from tim import get_words
 from prep import *
 from model import CBOW
 
+from tqdm import tqdm
+
 import torch
 from torch.autograd import Variable
 
@@ -21,14 +23,17 @@ optimizer = torch.optim.SGD(cbow.parameters(), lr=0.001)
 print("Almost there!")
 # train
 
+
+# TODO: save model with torch every few epochs
 for epoch in range(50):
     losses = []
     total_loss = 0
-    for context, target in zip(x, y):
+    for context, target in tqdm(zip(x, y)):
         cbow.zero_grad()
         context = list(map(lambda w: w2x[w], context))
-        log_probs = cbow(torch.LongTensor(context))
+        log_probs = cbow(Variable(torch.LongTensor(context)))
         loss = loss_function(log_probs, Variable(
+            # TODO: fix this part to be a one-hot vector
             torch.LongTensor([w2x[target]])))
         loss.backward()
         optimizer.step()

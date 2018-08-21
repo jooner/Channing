@@ -62,15 +62,13 @@ class CBOW(nn.Module):
             self.embeddings = pre_trained
         else:
             self.embeddings = nn.Embedding(vocab_size, embedding_dim)
-        self.linear1 = nn.Linear(embedding_dim, 128)
+        self.linear1 = nn.Linear(embedding_dim * 4, 128)
         self.activation_function1 = nn.ReLU()
         self.linear2 = nn.Linear(128, vocab_size)
         self.activation_function2 = nn.LogSoftmax(dim = -1)
 
     def forward(self, inputs):
-        # print(self.embeddings(inputs), self.embeddings(inputs).shape)
-        embeds = self.embeddings(inputs)
-        print(embeds)
+        embeds = self.embeddings(inputs).view(1, -1)
         out = self.linear1(embeds)
         out = self.activation_function1(out)
         out = self.linear2(out)
@@ -79,7 +77,7 @@ class CBOW(nn.Module):
 
     def get_word_embedding(self, word):
         word = Variable(torch.LongTensor([word_to_ix[word]]))
-        return self.embeddings(word).view(1,-1)
+        return self.embeddings(word).view(1, -1)
 
 
 # model = CBOW(vocab_size, EMBEDDING_DIM)
