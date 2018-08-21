@@ -4,6 +4,13 @@ import torch.nn.functional as F
 import torch.optim as optim
 
 
+CONTEXT_SIZE = 2
+EMBEDDING_DIM = 10
+
+word_to_ix = {}
+ix_to_word = {}
+
+
 def make_context_vector(context, word_to_ix):
     idxs = [word_to_ix[w] for w in context]
     tensor = torch.LongTensor(idxs)
@@ -18,13 +25,6 @@ def get_index_of_max(input):
 
 def get_max_prob_result(input, ix_to_word):
     return ix_to_word[get_index_of_max(input)]
-
-
-CONTEXT_SIZE = 2
-EMBEDDING_DIM = 10
-
-word_to_ix = {}
-ix_to_word = {}
 
 
 # This is where your code will come 
@@ -80,8 +80,6 @@ model = CBOW(vocab_size, EMDEDDING_DIM)
 
 loss_function = nn.NLLLoss()
 optimizer = torch.optim.SGD(model.parameters(), lr=0.001)
-
-
 
 
 
