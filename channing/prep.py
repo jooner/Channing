@@ -67,7 +67,15 @@ def encode(tokens):
     return np.stack(ret)
 
 
-def prep_train(vectorized_txt):
+def check(tokens):
+    ret = []
+    for t in tokens:
+        if t in w2v.keys():
+            ret.append(t)
+    return np.stack(ret)
+
+
+def _prep_train(vectorized_txt):
     x, y = [], []
     for i in range(window, vectorized_txt.shape[0] - (window + 1), 1):
         snippet = []
@@ -79,10 +87,16 @@ def prep_train(vectorized_txt):
     return np.stack(x), np.stack(y)
 
 
-p = PreProcessor()
-t = p.clean(sample)
-k = encode(t)
-x, y = prep_train(k)
+def prep_train(text):
+    x, y = [], []
+    for i in range(window, len(text) - (window + 1), 1):
+        snippet = []
+        for j in range(-window, window + 1):
+            if j != 0:
+                snippet.append(text[i + j])
+        x.append(np.stack(snippet))
+        y.append(text[i])
+    return np.stack(x), np.stack(y)
 
 
 def w2v_dict_to_torch_emb(w2v_dict):
@@ -95,5 +109,6 @@ def w2v_dict_to_torch_emb(w2v_dict):
     embs.weight.data.copy_(torch.from_numpy(np.stack(pretrained_weight)))
     return embs, w2x
 
+
 embs, w2x = w2v_dict_to_torch_emb(w2v)
-embs(torch.LongTensor([w2x['hillary']]))
+# embs(torch.LongTensor([w2x['hillary']]))
