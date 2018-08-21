@@ -8,3 +8,6 @@ NYT API Interaction Utility
 """
 
 from keys import nytimes_key
+from nytimesarticle import articleAPI
+api = articleAPI(nytimes_key)
+print(api.query(2016, 11))
