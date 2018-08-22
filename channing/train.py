@@ -40,3 +40,5 @@ for epoch in range(50):
         total_loss += loss.data
     print(total_loss)
     losses.append(total_loss)
+    if epoch % 10 == 0:
+        cbow.save_state_dict(f'channing_{epoch}.pt')
